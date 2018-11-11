@@ -6,18 +6,20 @@ Class {
 
 { #category : #visiting }
 AssertSematicAnalyzer >> visitMessageNode: aMessage [
-	| amessage |
-	"Print Arguments"
-	amessage := aMessage.
-	aMessage arguments traceCr.
-	aMessage selector = '_assert:'
-		ifTrue: [ "We know we have an _assert"
-			'We caught the assert' traceCr.
+	| params |
+	aMessage traceCr.
+	"Print Arguments" 
+		aMessage selector = '_assert:' 
+		ifTrue: [ 
+			"We know we have an _assert"
 			"We know that we want a block, else we don't know how to evaluate this"
-			amessage arguments first isBlock
-				ifTrue: [ 'We have a block' traceCr.
-					"amessage := self createAssertMessage: aMessage."
-					amessage traceCr ]
-				ifFalse: [ self error: '_assert takes a block as arguments!' ] ].
-		^ super visitMessageNode: amessage.
+			aMessage arguments first isBlock
+				ifTrue: [ 
+					params := OrderedCollection new.
+					params add: aMessage arguments first body statements first.
+					aMessage parent replaceNode: aMessage  withNode: (RBMessageNode receiver:  aMessage receiver selector: 'assert:'  arguments: params).
+					]
+				ifFalse: [ self error: '_assert takes a block as arguments!']
+				].
+		^ super visitMessageNode: aMessage.
 ]
