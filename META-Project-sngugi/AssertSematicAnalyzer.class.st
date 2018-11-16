@@ -7,7 +7,7 @@ Class {
 { #category : #visiting }
 AssertSematicAnalyzer >> visitMessageNode: aMessage [
 	| params |
-	aMessage traceCr.
+	aMessage methodNode methodClass debugMode traceCr.
 	"Print Arguments" 
 		aMessage selector = '_assert:' 
 		ifTrue: [ 
@@ -15,6 +15,11 @@ AssertSematicAnalyzer >> visitMessageNode: aMessage [
 			"We know that we want a block, else we don't know how to evaluate this"
 			aMessage arguments first isBlock
 				ifTrue: [ 
+					aMessage methodNode methodClass debugMode 
+					"Dynamically remove assert: at compile time"
+					ifTrue: [aMessage methodNode methodClass methodDict removeKey: #assert: ifAbsent:[] ] 
+					"Add an assert:aBooleanOrClosure with empty body"					
+					ifFalse: [ aMessage methodNode methodClass compile: 'assert:aBooleanOrClosure' ].
 					params := OrderedCollection new.
 					params add: aMessage arguments first body statements first.
 					aMessage parent replaceNode: aMessage  withNode: (RBMessageNode receiver:  aMessage receiver selector: 'assert:'  arguments: params).

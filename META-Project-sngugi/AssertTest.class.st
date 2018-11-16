@@ -20,7 +20,11 @@ AssertTest class >> debugMode [
 	^ (1 = 2).
 ]
 
+{ #category : #'as yet unclassified' }
+AssertTest >> assert:aBooleanOrClosure [
+]
+
 { #category : #tests }
 AssertTest >> test [
-	^ self _assert: [ 1 = 1 ]
+	^ self _assert: [ 1 = 2].
 ]
