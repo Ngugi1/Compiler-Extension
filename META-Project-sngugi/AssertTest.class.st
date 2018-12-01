@@ -26,5 +26,5 @@ AssertTest >> assert:aBooleanOrClosure [
 
 { #category : #tests }
 AssertTest >> test [
-	^ self _assert: [ 1 = 2].
+	^self _assert: [ 2 = 2]
 ]
