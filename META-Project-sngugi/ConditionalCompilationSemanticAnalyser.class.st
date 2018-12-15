@@ -11,6 +11,10 @@ ConditionalCompilationSemanticAnalyser >> visitMessageNode: aMessage [
 	ifTrue: [ 
 		"We have a block"
 		bloc := aMessage receiver.
+		'Before eval' traceCr.
+		(bloc evaluate value) traceCr.
+		'After eval' traceCr.
+		bloc temporaryNames traceCr.
 		"try to evaluate the block"
 		(bloc evaluate) on: Error do: [ CannotResolveAtCompileTime signal ]. 
 		"We know we have a block we can resolve at compile time"
