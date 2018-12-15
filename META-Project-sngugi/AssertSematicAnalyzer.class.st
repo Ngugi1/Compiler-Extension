@@ -17,12 +17,14 @@ AssertSematicAnalyzer >> visitMessageNode: aMessage [
 				ifTrue: [ 
 					aMessage methodNode methodClass debugMode 
 					"Dynamically remove assert: at compile time"
-					ifTrue: [aMessage methodNode methodClass methodDict removeKey: #assert: ifAbsent:[] ] 
-					"Add an assert:aBooleanOrClosure with empty body"					
-					ifFalse: [ aMessage methodNode methodClass compile: 'assert:aBooleanOrClosure' ].
-					params := OrderedCollection new.
+					ifTrue: [
+						params := OrderedCollection new.
 					params add: aMessage arguments first body statements first.
 					aMessage parent replaceNode: aMessage  withNode: (RBMessageNode receiver:  aMessage receiver selector: 'assert:'  arguments: params).
+						 ] 
+					"Add an assert:aBooleanOrClosure with empty body"					
+					ifFalse: [ aMessage methodNode methodClass compile: 'assert:aBooleanOrClosure' ].
+					
 					]
 				ifFalse: [ self error: '_assert takes a block as arguments!']
 				].

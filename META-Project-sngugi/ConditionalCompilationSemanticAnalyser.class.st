@@ -4,30 +4,34 @@ Class {
 	#category : #'META-Project-sngugi'
 }
 
+{ #category : #'as yet unclassified' }
+ConditionalCompilationSemanticAnalyser >> evaluatesToBoolean: bloc [
+	^ ((bloc evaluate value class = True ) or: 
+		(bloc evaluate  value class = False))
+	
+]
+
 { #category : #visiting }
 ConditionalCompilationSemanticAnalyser >> visitMessageNode: aMessage [
-| bloc |
+| block |
 	aMessage receiver isBlock 
 	ifTrue: [ 
 		"We have a block"
-		bloc := aMessage receiver.
-		'Before eval' traceCr.
-		(bloc evaluate value) traceCr.
-		'After eval' traceCr.
-		bloc temporaryNames traceCr.
+		block := aMessage receiver.
+		(block evaluate value) traceCr.
+		block temporaryNames traceCr.
 		"try to evaluate the block"
-		(bloc evaluate) on: Error do: [ CannotResolveAtCompileTime signal ]. 
+		(block evaluate) on: Error do: [ CannotResolveAtCompileTime signal ]. 
 		"We know we have a block we can resolve at compile time"
-		((bloc evaluate value class = True ) or: 
-		(bloc evaluate  value class = False)) "Does the block evaluate to a boolean type?"
+		(self evaluatesToBoolean: block) "Does the block evaluate to a boolean type?"
 		ifTrue: [ "Evaulates to a boolean value"
 			((aMessage selector = '_ifTrue:ifFalse:') or: (aMessage selector = '_ifTrue:')) "Is the selector of this form?"
 			ifTrue: [ 
 				"What is the value of the block"
-			(bloc evaluate value) ifTrue: [ 
+			(block evaluate value) ifTrue: [ 
 				"Inject code in the consequent block"
-				(aMessage children at: 2) body  traceCr.
-				aMessage parent replaceNode: aMessage  withNode: (aMessage children at: 2) body. 
+				(aMessage children first) body  traceCr.
+				aMessage parent replaceNode: aMessage  withNode: (aMessage children first) body. 
 				 ]
 			ifFalse: [
 				"Insert code at the alternative block"
@@ -37,7 +41,7 @@ ConditionalCompilationSemanticAnalyser >> visitMessageNode: aMessage [
 				  ].
 				 ].
 			(aMessage selector = '_ifFalse:') ifTrue: [ 
-				(bloc evaluate value) ifTrue: [ 
+				(block evaluate value) ifTrue: [ 
 					aMessage children traceCr.
 					aMessage parent removeNode: aMessage.
 					 ]

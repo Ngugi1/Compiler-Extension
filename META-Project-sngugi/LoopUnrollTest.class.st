@@ -14,5 +14,5 @@ LoopUnrollTest class >> compiler [
 
 { #category : #accessing }
 LoopUnrollTest >> test [
-	1 _to: 10000  unrollBy: 2 do: [ :i | (i + 1) traceCr].
+	1 _to: 10000  unrollBy: 2 do: [ :i | (i + 1) traceCr]
 ]

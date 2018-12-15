@@ -15,16 +15,12 @@ AssertTest class >> compiler [
 	^ compiler.
 ]
 
-{ #category : #options }
-AssertTest class >> debugMode [ 
-	^ (1 = 2).
-]
-
 { #category : #'as yet unclassified' }
-AssertTest >> assert:aBooleanOrClosure [
+AssertTest class >> debugMode [
+	^(1 = 1)
 ]
 
 { #category : #tests }
 AssertTest >> test [
-	^self _assert: [ 2 = 2]
+	^self _assert: [ 2 = 3].
 ]
