@@ -12,7 +12,12 @@ LoopUnrollTest class >> compiler [
 	^ comp
 ]
 
+{ #category : #'as yet unclassified' }
+LoopUnrollTest >> controlCond [
+	1 to: 100  by: 2 do: [ :i | (i + 1) traceCr].
+]
+
 { #category : #accessing }
 LoopUnrollTest >> test [
-	1 _to: 10000  unrollBy: 2 do: [ :i | (i + 1) traceCr]
+	1 _to: 100  unrollBy: 2 do: [ :i | (i + 1) traceCr].
 ]

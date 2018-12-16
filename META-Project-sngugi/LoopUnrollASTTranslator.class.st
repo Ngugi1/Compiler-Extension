@@ -8,9 +8,7 @@ Class {
 LoopUnrollASTTranslator >> ir [
 	| ir |
 	ir := super ir.
-	ir children do: [:child | child children traceCr ].
 	ir := LoopUnroller new unroll: ir.
-	ir children do: [:child | child children traceCr ].
 	^ ir
 ]
 

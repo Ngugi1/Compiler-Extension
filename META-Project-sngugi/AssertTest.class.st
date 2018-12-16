@@ -1,9 +1,6 @@
 Class {
 	#name : #AssertTest,
 	#superclass : #Object,
-	#instVars : [
-		'debug'
-	],
 	#category : #'META-Project-sngugi'
 }
 
@@ -17,10 +14,10 @@ AssertTest class >> compiler [
 
 { #category : #'as yet unclassified' }
 AssertTest class >> debugMode [
-	^(1 = 1)
+	^(1 = 2)
 ]
 
 { #category : #tests }
 AssertTest >> test [
-	^self _assert: [ 2 = 3].
+	self _assert: [ 2 = 3].
 ]

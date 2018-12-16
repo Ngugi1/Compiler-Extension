@@ -14,7 +14,6 @@ ConditionalCompilationTest class >> compiler [
 
 { #category : #tests }
 ConditionalCompilationTest >> test [
-[1 = 1 ] _ifTrue: [  'okay' traceCr. 
-	'hello' traceCr ] ifFalse: ['We are false' traceCr.
-	'We are here again' traceCr]
+[1 = 1 ] _ifTrue: [ 1 ] 
+			ifFalse: [ 2 ].
 ]
